@@ -4,6 +4,7 @@ const Caretaker = require('../models/Caretaker');
 const QRScanLog = require('../models/QRScanLog');
 const { verifyQrPayload } = require('../utils/verifyHmac');
 
+
 router.post('/scan-secure', async (req, res) => {
   const { qrToken, ts, signature } = req.body;
 
@@ -19,7 +20,7 @@ router.post('/scan-secure', async (req, res) => {
     const caretaker = await Caretaker.findOne({ qrToken });
 
     if (!caretaker) {
-      return res.json({ valid: false, message: '❌ Không tìm thấy người nuôi bệnh' });
+      return res.json({ valid: false, message: '❌ Thẻ đã bị hủy do thay đổi người nuôi bệnh' });
     }
 
     if (!caretaker.isActive) {
