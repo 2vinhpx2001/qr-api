@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Caretaker = require('../models/Caretaker');
 const QRScanLog = require('../models/QRScanLog');
+const verifyToken = require('../middleware/verifyToken');
 const { verifyQrPayload } = require('../utils/verifyHmac');
 
-
-router.post('/scan-secure', async (req, res) => {
+router.post('/scan-secure',verifyToken, async (req, res) => {
   const { qrToken, ts, signature } = req.body;
 
   if (!qrToken || !ts || !signature) {
@@ -40,7 +40,7 @@ router.post('/scan-secure', async (req, res) => {
       khoaId: caretaker.khoaId,
       khoaTen: caretaker.khoaTen,
       scanStatus: 'valid',
-      scannedAt: new Date()
+      scannedAt: new Date(),
     });
 
     res.json({
@@ -51,8 +51,8 @@ router.post('/scan-secure', async (req, res) => {
         caretakerCCCD: caretaker.caretakerCCCD,
         birthYear: caretaker.birthYear,
         address: caretaker.address,
-        photoUrls: caretaker.photoUrls
-      }
+        photoUrls: caretaker.photoUrls,
+      },
     });
   } catch (err) {
     console.error('❌ QR Error:', err);
