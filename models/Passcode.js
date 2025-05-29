@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 const PasscodeSchema = new mongoose.Schema({
-  code: String, // VD: "123456"
+  code: String, 
 });
 
 module.exports = mongoose.model('Passcode', PasscodeSchema);
