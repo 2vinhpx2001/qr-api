@@ -19,7 +19,15 @@ const sslOptions = {
   cert: fs.readFileSync(path.resolve(__dirname, 'ssl/cert.crt'))
 };
 
-app.use(cors());
+// app.use(cors());
+
+app.use(cors({
+  origin: 'https://nnb.bvndgiadinh.org.vn:8091', // Chỉ cho phép frontend từ Vite (hoặc domain cụ thể của bạn)
+  methods: ['POST'], // Giới hạn phương thức HTTP
+  allowedHeaders: ['Content-Type', 'Authorization'], // Giới hạn header được phép
+  credentials: true // Cho phép gửi cookie hoặc thông tin xác thực
+}));
+
 app.use(express.json());
 app.use('/api/qr', qrRoutes);
 app.use('/api/auth', authRoutes);
